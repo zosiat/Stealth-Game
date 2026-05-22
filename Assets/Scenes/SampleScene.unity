@@ -2703,14 +2703,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1980414937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5360501d148d2484890a4cd22d3f2ef1, type: 3}
+  m_Script: {fileID: 11500000, guid: e93f50058608b804fa30f2dd94f34ff3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardAI
   waypoints:
   - {fileID: 95917287}
   - {fileID: 609923453}
   - {fileID: 2086723000}
   - {fileID: 1806774090}
+  waypointStoppingDistance: 0.5
+  player: {fileID: 848717714}
+  visionRange: 10
+  visionAngle: 60
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  investigateTime: 3
+  chaseLoseTime: 2
+  lookAroundSpeed: 90
+  lookAroundAngle: 60
+  guardRenderer: {fileID: 1980414941}
+  patrolColor: {r: 0, g: 1, b: 0, a: 1}
+  investigateColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  chaseColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &2041111488
 GameObject:
   m_ObjectHideFlags: 0
