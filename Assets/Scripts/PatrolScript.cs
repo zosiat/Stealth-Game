@@ -1,3 +1,5 @@
+//INITIAL TEST SCRIPT NO LONGER IN USE
+
 using UnityEngine;
 using UnityEngine.AI;
 
