@@ -17,6 +17,7 @@ public class FirstPersonPlayer : MonoBehaviour
 
     private CharacterController controller;
     private float verticalLookRotation;
+    private bool isCrouching;
 
     void Start()
     {
@@ -74,15 +75,22 @@ public class FirstPersonPlayer : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.C))
         {
-            controller.height = crouchingHeight;
+            isCrouching = true;
 
+            controller.height = crouchingHeight;
             cameraHolder.localPosition = new Vector3(0, 0.2f, 0);
         }
         else
         {
-            controller.height = standingHeight;
+            isCrouching = false;
 
+            controller.height = standingHeight;
             cameraHolder.localPosition = new Vector3(0, 0.6f, 0);
         }
+    }
+
+    public bool IsCrouching()
+    {
+        return isCrouching;
     }
 }

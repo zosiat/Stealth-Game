@@ -58,8 +58,16 @@ public class GuardAI : MonoBehaviour
     void Update()
     {
         bool canSeePlayer = CanSeePlayer();
+        bool playerIsCrouching = IsPlayerCrouching();
 
-        if (canSeePlayer)
+        if (playerIsCrouching && currentState == GuardState.Chasing)
+        {
+            lastKnownPlayerPosition = player.position;
+            ChangeState(GuardState.Investigating);
+            return;
+        }
+
+        if (canSeePlayer && !playerIsCrouching)
         {
             lastKnownPlayerPosition = player.position;
             ChangeState(GuardState.Chasing);
@@ -79,6 +87,17 @@ public class GuardAI : MonoBehaviour
                 Chase(canSeePlayer);
                 break;
         }
+    }
+
+    bool IsPlayerCrouching()
+    {
+        if (player == null) return false;
+
+        FirstPersonPlayer playerMovement = player.GetComponent<FirstPersonPlayer>();
+
+        if (playerMovement == null) return false;
+
+        return playerMovement.IsCrouching();
     }
 
     void ChangeState(GuardState newState)
@@ -155,6 +174,13 @@ public class GuardAI : MonoBehaviour
 
     void Chase(bool canSeePlayer)
     {
+        if (IsPlayerCrouching())
+        {
+            lastKnownPlayerPosition = player.position;
+            ChangeState(GuardState.Investigating);
+            return;
+        }
+
         if (canSeePlayer)
         {
             chaseLoseTimer = chaseLoseTime;
@@ -218,44 +244,22 @@ public class GuardAI : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-    {
-        Vector3 eyePosition = transform.position + Vector3.up;
+    // void OnDrawGizmos()
+    // {
+    //     Vector3 eyePosition = transform.position + Vector3.up;
 
-        //range sphere
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(eyePosition, visionRange);
+    //     //range sphere
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(eyePosition, visionRange);
 
-        //vision cone lines
-        Vector3 leftEdge = Quaternion.Euler(0, -visionAngle / 2f, 0) * transform.forward;
-        Vector3 rightEdge = Quaternion.Euler(0, visionAngle / 2f, 0) * transform.forward;
+    //     //vision cone lines
+    //     Vector3 leftEdge = Quaternion.Euler(0, -visionAngle / 2f, 0) * transform.forward;
+    //     Vector3 rightEdge = Quaternion.Euler(0, visionAngle / 2f, 0) * transform.forward;
 
-        Gizmos.color = Color.cyan;
+    //     Gizmos.color = Color.cyan;
 
-        Gizmos.DrawRay(eyePosition, leftEdge * visionRange);
-        Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
-        Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
-
-        //connect cone edges
-        int segments = 20;
-
-        Vector3 previousPoint = eyePosition + leftEdge * visionRange;
-
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = Mathf.Lerp(-visionAngle / 2f, visionAngle / 2f, i / (float)segments);
-
-            Vector3 direction = Quaternion.Euler(0, angle, 0) * transform.forward;
-
-            Vector3 newPoint = eyePosition + direction * visionRange;
-
-            Gizmos.DrawLine(previousPoint, newPoint);
-
-            previousPoint = newPoint;
-        }
-
-        //last known player position
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(lastKnownPlayerPosition, 0.25f);
-    }
+    //     Gizmos.DrawRay(eyePosition, leftEdge * visionRange);
+    //     Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
+    //     Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
+    // }
 }
