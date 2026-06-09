@@ -19,6 +19,12 @@ public class TeleportToLevel2 : MonoBehaviour
         if (other.gameObject == player)
         {
             TeleportPlayer();
+
+            PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+            if (inventory != null)
+            {
+                inventory.ShowFindKeyObjective();
+            }
         }
     }
 
