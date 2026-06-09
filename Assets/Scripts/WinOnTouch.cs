@@ -10,21 +10,42 @@ public class WinOnTouch : MonoBehaviour
 
     private bool hasWon = false;
 
+    private void Start()
+    {
+        if (winText != null)
+        {
+            winText.gameObject.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (hasWon) return;
 
         if (other.CompareTag("Player"))
         {
-            hasWon = true;
+            PlayerInventory inventory = other.GetComponent<PlayerInventory>();
 
-            if (winText != null)
+            if (inventory != null && inventory.hasPinkKey)
             {
-                winText.text = "You won!";
-                winText.gameObject.SetActive(true);
-            }
+                hasWon = true;
 
-            StartCoroutine(RestartAfterDelay());
+                if (winText != null)
+                {
+                    winText.text = "You escaped!";
+                    winText.gameObject.SetActive(true);
+                }
+
+                StartCoroutine(RestartAfterDelay());
+            }
+            else
+            {
+                if (winText != null)
+                {
+                    winText.text = "You need to find the pink key first!";
+                    winText.gameObject.SetActive(true);
+                }
+            }
         }
     }
 
