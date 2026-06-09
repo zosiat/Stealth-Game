@@ -8,7 +8,7 @@ public class PinkKeyPickup : MonoBehaviour
 
         if (inventory != null)
         {
-            inventory.hasPinkKey = true;
+            inventory.CollectPinkKey();
             Debug.Log("Pink key collected!");
             gameObject.SetActive(false);
         }
