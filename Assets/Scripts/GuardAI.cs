@@ -78,6 +78,19 @@ public class GuardAI : MonoBehaviour
     {
         bool canSeePlayer = CanSeePlayer();
         bool playerIsCrouching = IsPlayerCrouching();
+        bool playerIsHidden = IsPlayerHidden();
+
+        // NEW: if player is hiding, guard stops chasing and ignores player
+        if (playerIsHidden)
+        {
+            if (currentState == GuardState.Chasing)
+            {
+                lastKnownPlayerPosition = player.position;
+                ChangeState(GuardState.Investigating);
+            }
+
+            return;
+        }
 
         if (playerIsCrouching && currentState == GuardState.Chasing)
         {
@@ -120,6 +133,18 @@ public class GuardAI : MonoBehaviour
         if (playerMovement == null) return false;
 
         return playerMovement.IsCrouching();
+    }
+
+    // NEW
+    bool IsPlayerHidden()
+    {
+        if (player == null) return false;
+
+        FirstPersonPlayer playerMovement = player.GetComponent<FirstPersonPlayer>();
+
+        if (playerMovement == null) return false;
+
+        return playerMovement.IsHidden();
     }
 
     void ChangeState(GuardState newState)
@@ -298,3 +323,22 @@ public class GuardAI : MonoBehaviour
         }
     }
 }
+
+    // void OnDrawGizmos()
+    // {
+    //     Vector3 eyePosition = transform.position + Vector3.up;
+
+    //     //range sphere
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(eyePosition, visionRange);
+
+    //     //vision cone lines
+    //     Vector3 leftEdge = Quaternion.Euler(0, -visionAngle / 2f, 0) * transform.forward;
+    //     Vector3 rightEdge = Quaternion.Euler(0, visionAngle / 2f, 0) * transform.forward;
+
+    //     Gizmos.color = Color.cyan;
+
+    //     Gizmos.DrawRay(eyePosition, leftEdge * visionRange);
+    //     Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
+    //     Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
+    // }

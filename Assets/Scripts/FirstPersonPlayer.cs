@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class FirstPersonPlayer : MonoBehaviour
 {
@@ -15,9 +17,17 @@ public class FirstPersonPlayer : MonoBehaviour
     public float standingHeight = 2f;
     public float crouchingHeight = 1f;
 
+    [Header("hide ability")]
+    public float hideDuration = 3f;
+
+    [Header("UI")]
+    public TMP_Text hideMessageText;
+
     private CharacterController controller;
     private float verticalLookRotation;
     private bool isCrouching;
+    private bool isHidden;
+    private bool hideUsed;
 
     void Start()
     {
@@ -25,6 +35,11 @@ public class FirstPersonPlayer : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (hideMessageText != null)
+        {
+            hideMessageText.gameObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -32,6 +47,7 @@ public class FirstPersonPlayer : MonoBehaviour
         MovePlayer();
         LookAround();
         HandleCrouch();
+        HandleHideAbility();
     }
 
     void MovePlayer()
@@ -43,13 +59,11 @@ public class FirstPersonPlayer : MonoBehaviour
 
         float currentSpeed = walkSpeed;
 
-        //sprint
         if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed = sprintSpeed;
         }
 
-        //crouch speed
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.C))
         {
             currentSpeed = crouchSpeed;
@@ -68,7 +82,8 @@ public class FirstPersonPlayer : MonoBehaviour
         verticalLookRotation -= mouseY;
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -80f, 80f);
 
-        cameraHolder.localRotation = Quaternion.Euler(verticalLookRotation, 0, 0);
+        cameraHolder.localRotation =
+            Quaternion.Euler(verticalLookRotation, 0, 0);
     }
 
     void HandleCrouch()
@@ -78,19 +93,67 @@ public class FirstPersonPlayer : MonoBehaviour
             isCrouching = true;
 
             controller.height = crouchingHeight;
-            cameraHolder.localPosition = new Vector3(0, 0.2f, 0);
+            cameraHolder.localPosition =
+                new Vector3(0, 0.2f, 0);
         }
         else
         {
             isCrouching = false;
 
             controller.height = standingHeight;
-            cameraHolder.localPosition = new Vector3(0, 0.6f, 0);
+            cameraHolder.localPosition =
+                new Vector3(0, 0.6f, 0);
+        }
+    }
+
+    void HandleHideAbility()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && !hideUsed)
+        {
+            StartCoroutine(HideForSeconds());
+        }
+    }
+
+    IEnumerator HideForSeconds()
+    {
+        hideUsed = true;
+        isHidden = true;
+
+        if (hideMessageText != null)
+        {
+            hideMessageText.text = "HIDDEN!";
+            hideMessageText.gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(hideDuration);
+
+        isHidden = false;
+
+        if (hideMessageText != null)
+        {
+            hideMessageText.text = "Hide Ability Used";
+        }
+
+        yield return new WaitForSeconds(2.5f);
+
+        if (hideMessageText != null)
+        {
+            hideMessageText.gameObject.SetActive(false);
         }
     }
 
     public bool IsCrouching()
     {
         return isCrouching;
+    }
+
+    public bool IsHidden()
+    {
+        return isHidden;
+    }
+
+    public void SetHidden(bool hidden)
+    {
+        isHidden = hidden;
     }
 }
