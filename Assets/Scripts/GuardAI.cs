@@ -34,6 +34,12 @@ public class GuardAI : MonoBehaviour
     public Color investigateColor = Color.yellow;
     public Color chaseColor = Color.red;
 
+    [Header("audio")]
+    public AudioClip detectionClip;
+    [Range(0f, 1f)]
+    public float detectionVolume = 1f;
+
+    private AudioSource audioSource;
     private NavMeshAgent agent;
     private GuardState currentState;
     private int currentWaypointIndex;
@@ -46,6 +52,7 @@ public class GuardAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
 
         if (waypoints.Length > 0)
         {
@@ -128,6 +135,7 @@ public class GuardAI : MonoBehaviour
             agent.updateRotation = true;
             chaseLoseTimer = chaseLoseTime;
             SetGuardColor(chaseColor);
+            PlayDetectionSound();
         }
     }
 
@@ -226,6 +234,19 @@ public class GuardAI : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool IsChasing()
+    {
+        return currentState == GuardState.Chasing;
+    }
+
+    void PlayDetectionSound()
+    {
+        if (audioSource != null && detectionClip != null)
+        {
+            audioSource.PlayOneShot(detectionClip, detectionVolume);
+        }
     }
 
     void SetGuardColor(Color color)

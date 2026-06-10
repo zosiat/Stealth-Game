@@ -1319,6 +1319,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2115694124}
+    - targetCorrespondingSourceObject: {fileID: 6333961222951096453, guid: 448084311cc493e4f83eb0c128f18a07,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2115694132}
   m_SourcePrefab: {fileID: 100100000, guid: 448084311cc493e4f83eb0c128f18a07, type: 3}
 --- !u!4 &78732638 stripped
 Transform:
@@ -12586,6 +12590,122 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!82 &1051129341
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127970185}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1051129342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127970185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73034e2a03851423599fbac4762fbbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProximityAudio
+  player: {fileID: 280569931}
+  proximityClip: {fileID: 8300000, guid: dba682f4fdffb488b8d41c76a8dbe682, type: 3}
+  minDistance: 2
+  maxDistance: 15
+  maxVolume: 1
+  fadeSpeed: 5
+  onlyWhenChasing: 1
 --- !u!1 &1064281527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6333961222951096453, guid: 448084311cc493e4f83eb0c128f18a07,
@@ -12631,6 +12751,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3755f565743a074288526d027f51107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RestartOnTouch
+--- !u!114 &1064281541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064281527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73034e2a03851423599fbac4762fbbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProximityAudio
+  player: {fileID: 280569931}
+  proximityClip: {fileID: 8300000, guid: dba682f4fdffb488b8d41c76a8dbe682, type: 3}
+  minDistance: 2
+  maxDistance: 15
+  maxVolume: 1
+  fadeSpeed: 5
+  onlyWhenChasing: 1
 --- !u!1 &1069485547
 GameObject:
   m_ObjectHideFlags: 0
@@ -16883,6 +17022,7 @@ GameObject:
   - component: {fileID: 1387722638}
   - component: {fileID: 1387722637}
   - component: {fileID: 1387722640}
+  - component: {fileID: 1387722641}
   m_Layer: 0
   m_Name: Mimic
   m_TagString: Untagged
@@ -16940,7 +17080,7 @@ MonoBehaviour:
   minGrowCoef: 4.5
   maxGrowCoef: 6.5
   newLegCooldown: 0.3
-  velocity: {x: 0.88781095, y: 0, z: 0.39642724}
+  velocity: {x: -0.95544165, y: 0, z: 0.02920322}
 --- !u!4 &1387722639
 Transform:
   m_ObjectHideFlags: 0
@@ -17007,6 +17147,25 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1387722641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387722636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73034e2a03851423599fbac4762fbbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProximityAudio
+  player: {fileID: 280569931}
+  proximityClip: {fileID: 8300000, guid: dba682f4fdffb488b8d41c76a8dbe682, type: 3}
+  minDistance: 2
+  maxDistance: 15
+  maxVolume: 1
+  fadeSpeed: 5
+  onlyWhenChasing: 0
 --- !u!1 &1391337907
 GameObject:
   m_ObjectHideFlags: 0
@@ -21963,6 +22122,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1051129333}
+    - targetCorrespondingSourceObject: {fileID: 6333961222951096453, guid: 448084311cc493e4f83eb0c128f18a07,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1051129341}
+    - targetCorrespondingSourceObject: {fileID: 6333961222951096453, guid: 448084311cc493e4f83eb0c128f18a07,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1051129342}
   m_SourcePrefab: {fileID: 100100000, guid: 448084311cc493e4f83eb0c128f18a07, type: 3}
 --- !u!1 &1874508690
 GameObject:
@@ -22952,6 +23119,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1064281533}
+    - targetCorrespondingSourceObject: {fileID: 6333961222951096453, guid: 448084311cc493e4f83eb0c128f18a07,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1064281541}
   m_SourcePrefab: {fileID: 100100000, guid: 448084311cc493e4f83eb0c128f18a07, type: 3}
 --- !u!1 &1913400295
 GameObject:
@@ -24895,6 +25066,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2115694132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363865574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73034e2a03851423599fbac4762fbbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProximityAudio
+  player: {fileID: 280569931}
+  proximityClip: {fileID: 8300000, guid: dba682f4fdffb488b8d41c76a8dbe682, type: 3}
+  minDistance: 2
+  maxDistance: 15
+  maxVolume: 1
+  fadeSpeed: 5
+  onlyWhenChasing: 1
 --- !u!1 &2116930575
 GameObject:
   m_ObjectHideFlags: 0
