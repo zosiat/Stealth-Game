@@ -42,6 +42,7 @@ public class GuardAI : MonoBehaviour
     [Header("animation")]
     public string turnTriggerName = "Turn";
     public string speedParameterName = "Speed";
+    public string turnStateName = "HumanM@Turn01_Left";
 
     private AudioSource audioSource;
     private NavMeshAgent agent;
@@ -80,7 +81,6 @@ public class GuardAI : MonoBehaviour
         bool playerIsCrouching = IsPlayerCrouching();
         bool playerIsHidden = IsPlayerHidden();
 
-        // NEW: if player is hiding, guard stops chasing and ignores player
         if (playerIsHidden)
         {
             if (currentState == GuardState.Chasing)
@@ -89,6 +89,7 @@ public class GuardAI : MonoBehaviour
                 ChangeState(GuardState.Investigating);
             }
 
+            UpdateAnimationSpeed();
             return;
         }
 
@@ -135,7 +136,6 @@ public class GuardAI : MonoBehaviour
         return playerMovement.IsCrouching();
     }
 
-    // NEW
     bool IsPlayerHidden()
     {
         if (player == null) return false;
@@ -203,7 +203,6 @@ public class GuardAI : MonoBehaviour
         if (!agent.pathPending && agent.remainingDistance < waypointStoppingDistance)
         {
             investigateTimer -= Time.deltaTime;
-
             lookAroundTimer += Time.deltaTime * lookAroundSpeed;
 
             float lookAngle = Mathf.Sin(lookAroundTimer * Mathf.Deg2Rad) * lookAroundAngle;
@@ -280,18 +279,26 @@ public class GuardAI : MonoBehaviour
 
     void PlayTurnAnimation()
     {
-        if (animator != null)
-        {
-            animator.SetTrigger(turnTriggerName);
-        }
+        if (animator == null) return;
+
+        animator.SetFloat(speedParameterName, 0f);
+        animator.ResetTrigger(turnTriggerName);
+        animator.SetTrigger(turnTriggerName);
     }
 
     void UpdateAnimationSpeed()
     {
-        if (animator != null && agent != null)
+        if (animator == null || agent == null) return;
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (stateInfo.IsName(turnStateName))
         {
-            animator.SetFloat(speedParameterName, agent.velocity.magnitude);
+            animator.SetFloat(speedParameterName, 0f);
+            return;
         }
+
+        animator.SetFloat(speedParameterName, agent.velocity.magnitude);
     }
 
     public bool IsChasing()
@@ -323,22 +330,3 @@ public class GuardAI : MonoBehaviour
         }
     }
 }
-
-    // void OnDrawGizmos()
-    // {
-    //     Vector3 eyePosition = transform.position + Vector3.up;
-
-    //     //range sphere
-    //     Gizmos.color = Color.yellow;
-    //     Gizmos.DrawWireSphere(eyePosition, visionRange);
-
-    //     //vision cone lines
-    //     Vector3 leftEdge = Quaternion.Euler(0, -visionAngle / 2f, 0) * transform.forward;
-    //     Vector3 rightEdge = Quaternion.Euler(0, visionAngle / 2f, 0) * transform.forward;
-
-    //     Gizmos.color = Color.cyan;
-
-    //     Gizmos.DrawRay(eyePosition, leftEdge * visionRange);
-    //     Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
-    //     Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
-    // }
