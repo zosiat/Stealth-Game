@@ -39,8 +39,14 @@ public class GuardAI : MonoBehaviour
     [Range(0f, 1f)]
     public float detectionVolume = 1f;
 
+    [Header("animation")]
+    public string turnTriggerName = "Turn";
+    public string speedParameterName = "Speed";
+
     private AudioSource audioSource;
     private NavMeshAgent agent;
+    private Animator animator;
+
     private GuardState currentState;
     private int currentWaypointIndex;
     private Vector3 lastKnownPlayerPosition;
@@ -53,6 +59,12 @@ public class GuardAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponentInChildren<Animator>();
+
+        if (animator != null)
+        {
+            animator.applyRootMotion = false;
+        }
 
         if (waypoints.Length > 0)
         {
@@ -84,6 +96,7 @@ public class GuardAI : MonoBehaviour
         {
             lastKnownPlayerPosition = player.position;
             ChangeState(GuardState.Investigating);
+            UpdateAnimationSpeed();
             return;
         }
 
@@ -107,6 +120,8 @@ public class GuardAI : MonoBehaviour
                 Chase(canSeePlayer);
                 break;
         }
+
+        UpdateAnimationSpeed();
     }
 
     bool IsPlayerCrouching()
@@ -153,6 +168,8 @@ public class GuardAI : MonoBehaviour
 
             agent.SetDestination(lastKnownPlayerPosition);
             SetGuardColor(investigateColor);
+
+            PlayTurnAnimation();
         }
 
         if (currentState == GuardState.Chasing)
@@ -259,6 +276,22 @@ public class GuardAI : MonoBehaviour
         }
 
         return false;
+    }
+
+    void PlayTurnAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(turnTriggerName);
+        }
+    }
+
+    void UpdateAnimationSpeed()
+    {
+        if (animator != null && agent != null)
+        {
+            animator.SetFloat(speedParameterName, agent.velocity.magnitude);
+        }
     }
 
     public bool IsChasing()
