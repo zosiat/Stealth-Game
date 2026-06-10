@@ -66,6 +66,19 @@ public class GuardAI : MonoBehaviour
     {
         bool canSeePlayer = CanSeePlayer();
         bool playerIsCrouching = IsPlayerCrouching();
+        bool playerIsHidden = IsPlayerHidden();
+
+        // NEW: if player is hiding, guard stops chasing and ignores player
+        if (playerIsHidden)
+        {
+            if (currentState == GuardState.Chasing)
+            {
+                lastKnownPlayerPosition = player.position;
+                ChangeState(GuardState.Investigating);
+            }
+
+            return;
+        }
 
         if (playerIsCrouching && currentState == GuardState.Chasing)
         {
@@ -105,6 +118,18 @@ public class GuardAI : MonoBehaviour
         if (playerMovement == null) return false;
 
         return playerMovement.IsCrouching();
+    }
+
+    // NEW
+    bool IsPlayerHidden()
+    {
+        if (player == null) return false;
+
+        FirstPersonPlayer playerMovement = player.GetComponent<FirstPersonPlayer>();
+
+        if (playerMovement == null) return false;
+
+        return playerMovement.IsHidden();
     }
 
     void ChangeState(GuardState newState)
@@ -264,6 +289,7 @@ public class GuardAI : MonoBehaviour
             rend.material.color = color;
         }
     }
+}
 
     // void OnDrawGizmos()
     // {
@@ -283,4 +309,3 @@ public class GuardAI : MonoBehaviour
     //     Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
     //     Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
     // }
-}
