@@ -39,8 +39,14 @@ public class GuardAI : MonoBehaviour
     [Range(0f, 1f)]
     public float detectionVolume = 1f;
 
+    [Header("animation")]
+    public string turnTriggerName = "Turn";
+    public string speedParameterName = "Speed";
+
     private AudioSource audioSource;
     private NavMeshAgent agent;
+    private Animator animator;
+
     private GuardState currentState;
     private int currentWaypointIndex;
     private Vector3 lastKnownPlayerPosition;
@@ -53,6 +59,12 @@ public class GuardAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponentInChildren<Animator>();
+
+        if (animator != null)
+        {
+            animator.applyRootMotion = false;
+        }
 
         if (waypoints.Length > 0)
         {
@@ -71,6 +83,7 @@ public class GuardAI : MonoBehaviour
         {
             lastKnownPlayerPosition = player.position;
             ChangeState(GuardState.Investigating);
+            UpdateAnimationSpeed();
             return;
         }
 
@@ -94,6 +107,8 @@ public class GuardAI : MonoBehaviour
                 Chase(canSeePlayer);
                 break;
         }
+
+        UpdateAnimationSpeed();
     }
 
     bool IsPlayerCrouching()
@@ -128,6 +143,8 @@ public class GuardAI : MonoBehaviour
 
             agent.SetDestination(lastKnownPlayerPosition);
             SetGuardColor(investigateColor);
+
+            PlayTurnAnimation();
         }
 
         if (currentState == GuardState.Chasing)
@@ -236,6 +253,22 @@ public class GuardAI : MonoBehaviour
         return false;
     }
 
+    void PlayTurnAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(turnTriggerName);
+        }
+    }
+
+    void UpdateAnimationSpeed()
+    {
+        if (animator != null && agent != null)
+        {
+            animator.SetFloat(speedParameterName, agent.velocity.magnitude);
+        }
+    }
+
     public bool IsChasing()
     {
         return currentState == GuardState.Chasing;
@@ -264,23 +297,4 @@ public class GuardAI : MonoBehaviour
             rend.material.color = color;
         }
     }
-
-    // void OnDrawGizmos()
-    // {
-    //     Vector3 eyePosition = transform.position + Vector3.up;
-
-    //     //range sphere
-    //     Gizmos.color = Color.yellow;
-    //     Gizmos.DrawWireSphere(eyePosition, visionRange);
-
-    //     //vision cone lines
-    //     Vector3 leftEdge = Quaternion.Euler(0, -visionAngle / 2f, 0) * transform.forward;
-    //     Vector3 rightEdge = Quaternion.Euler(0, visionAngle / 2f, 0) * transform.forward;
-
-    //     Gizmos.color = Color.cyan;
-
-    //     Gizmos.DrawRay(eyePosition, leftEdge * visionRange);
-    //     Gizmos.DrawRay(eyePosition, transform.forward * visionRange);
-    //     Gizmos.DrawRay(eyePosition, rightEdge * visionRange);
-    // }
 }
